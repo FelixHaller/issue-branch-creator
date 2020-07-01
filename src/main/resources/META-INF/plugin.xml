@@ -8,7 +8,8 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyApplicationService"/>
+        <applicationService
+                serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyProjectService"/>
     </extensions>
 
@@ -16,4 +17,10 @@
         <listener class="com.github.felixhaller.issuebranchcreator.listeners.MyProjectManagerListener"
                   topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </projectListeners>
+    <actions>
+        <action id="com.github.felixhaller.issuebranchcreator.PopupDialogAction"
+                class="com.github.felixhaller.issuebranchcreator.PopupDialogAction" text="Create a Branch by Issue Id">
+            <add-to-group group-id="GitRepositoryActions" anchor="first"/>
+        </action>
+    </actions>
 </idea-plugin>
