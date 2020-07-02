@@ -1,11 +1,11 @@
 package com.github.felixhaller.issuebranchcreator.settings
 
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.Project
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
@@ -14,8 +14,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-
-class ProjectSettingsConfigurable : Configurable {
+class ProjectSettingsConfigurable(private val project: Project) : Configurable {
     private var mySettingsComponent: ProjectSettingsComponent? = null
 
     override fun isModified(): Boolean = true
@@ -38,11 +37,11 @@ class ProjectSettingsConfigurable : Configurable {
             password = password
         )
 
-        service<IssueBranchCreatorSettingsService>().write(settings)
+        project.service<IssueBranchCreatorSettingsService>().write(settings)
     }
 
     override fun reset() {
-        val settings = service<IssueBranchCreatorSettingsService>().read()
+        val settings = project.service<IssueBranchCreatorSettingsService>().read()
 
         mySettingsComponent!!.jiraUrlText = settings.jiraUrl
         mySettingsComponent!!.usernameText = settings.username
@@ -64,11 +63,6 @@ class ProjectSettingsState : PersistentStateComponent<ProjectSettingsState> {
 
     override fun loadState(state: ProjectSettingsState) {
         XmlSerializerUtil.copyBean(state, this)
-    }
-
-    companion object {
-        val instance: ProjectSettingsState
-            get() = ServiceManager.getService(ProjectSettingsState::class.java)
     }
 }
 
