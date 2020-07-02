@@ -1,0 +1,59 @@
+package com.github.felixhaller.issuebranchcreator
+
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import okhttp3.Credentials
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+
+
+private val client = OkHttpClient()
+private val mapper = ObjectMapper()
+    .registerKotlinModule()
+    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+class JiraClient {
+    private val baseURL = "https://jira.spreadomat.net"
+
+    fun getIssueTitle(issueId: String, username: String, password: String): String {
+        val httpUrl = "$baseURL/rest/api/latest/issue/$issueId".toHttpUrl()
+        return client.getAndMapWithBasicAuth<IssueResponse>(httpUrl, mapper, username, password).fields.summary
+    }
+}
+
+data class IssueResponse(
+    val fields: Fields
+) {
+    data class Fields(
+        val summary: String
+    )
+}
+
+inline fun <reified T> OkHttpClient.getAndMapWithBasicAuth(url: HttpUrl, mapper: ObjectMapper, username: String, password: String): T {
+    val credentials = Credentials.basic(username, password)
+    val request = Request.Builder().addHeader("Authorization", credentials).url(url).get().build()
+    return callAndMap(this, request, url, mapper)
+}
+
+inline fun <reified T> callAndMap(httpClient: OkHttpClient, request: Request, url: HttpUrl, mapper: ObjectMapper): T {
+    try {
+        return httpClient.newCall(request).execute().use {
+            if (it.isSuccessful) {
+                val body = it.body ?: throw Exception("Received empty response $url")
+                mapper.readValue<T>(body.byteStream())
+            } else {
+                throw Exception("Received code ${it.code} from url $url. Body: ${it.body?.string()}")
+            }
+        }
+    } catch (ex: JsonProcessingException) {
+        throw Exception("Failed to deserialize body of $url.", ex)
+    } catch (ex: IOException) {
+        throw Exception("Failed to sent request to $url due to IO issues", ex)
+    }
+}

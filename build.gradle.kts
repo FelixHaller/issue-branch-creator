@@ -37,6 +37,8 @@ repositories {
 }
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("com.squareup.okhttp3:okhttp:4.7.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.10.0-RC1")
 }
 
