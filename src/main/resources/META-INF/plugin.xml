@@ -11,6 +11,14 @@
         <applicationService
                 serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyProjectService"/>
+
+        <applicationService serviceImplementation="com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsState"/>
+
+        <projectConfigurable parentId="tools"
+                             instance="com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsConfigurable"
+                             id="com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsConfigurable"
+                             displayName="Issue Branch Creator"
+                             nonDefaultProject="true"/>
     </extensions>
 
     <projectListeners>
