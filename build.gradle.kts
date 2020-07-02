@@ -40,6 +40,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
     implementation("com.github.slugify:slugify:2.1.3")
+    implementation("org.apache.commons:commons-text:1.8")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.10.0-RC1")
 }
 
