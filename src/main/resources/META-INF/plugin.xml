@@ -8,10 +8,6 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService
-                serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.felixhaller.issuebranchcreator.services.MyProjectService"/>
-
         <applicationService serviceImplementation="com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsState"/>
 
         <projectConfigurable parentId="tools"
@@ -20,11 +16,6 @@
                              displayName="Issue Branch Creator"
                              nonDefaultProject="true"/>
     </extensions>
-
-    <projectListeners>
-        <listener class="com.github.felixhaller.issuebranchcreator.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </projectListeners>
 
     <actions>
         <action id="com.github.felixhaller.issuebranchcreator.PopupDialogAction"
