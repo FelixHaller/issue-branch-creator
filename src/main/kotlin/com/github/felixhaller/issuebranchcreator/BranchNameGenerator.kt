@@ -1,14 +1,17 @@
-package com.github.felixhaller.issuebranchcreator.settings
+package com.github.felixhaller.issuebranchcreator
 
+import com.github.felixhaller.issuebranchcreator.settings.IssueBranchCreatorSettingsService
 import com.github.slugify.Slugify
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
 import org.apache.commons.text.StringSubstitutor
 
 
-class BranchNameGenerator {
+class BranchNameGenerator(project: Project) {
 
+    val settings = project.service<IssueBranchCreatorSettingsService>().read()
     val slugifier = Slugify()
-
-    val template = "{cleanIssueTitle}-{issueID}"
+    val template = settings.template
 
     fun generateBranchName(issueId: String, issueTitle: String): String {
         val cleanedIssueTitle = cleanIssueTitle(issueTitle)

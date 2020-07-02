@@ -30,11 +30,13 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
         val jiraUrl = mySettingsComponent!!.jiraUrlText ?: ""
         val username = mySettingsComponent!!.usernameText ?: ""
         val password = mySettingsComponent!!.passwordText ?: ""
+        val template = mySettingsComponent!!.templateText ?: ""
 
         val settings = IssueBranchCreatorSettings(
             jiraUrl = jiraUrl,
             username = username,
-            password = password
+            password = password,
+            template = template
         )
 
         project.service<IssueBranchCreatorSettingsService>().write(settings)
@@ -46,6 +48,7 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
         mySettingsComponent!!.jiraUrlText = settings.jiraUrl
         mySettingsComponent!!.usernameText = settings.username
         mySettingsComponent!!.passwordText = settings.password
+        mySettingsComponent!!.templateText = settings.template
     }
 
     override fun disposeUIResources() {
@@ -56,6 +59,7 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
 @State(name = "com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsState", storages = [Storage("IssueBranchCreator.xml")])
 class ProjectSettingsState : PersistentStateComponent<ProjectSettingsState> {
     var jiraUrl = ""
+    var template = "{cleanIssueTitle}-{issueID}"
 
     override fun getState(): ProjectSettingsState {
         return this
@@ -71,6 +75,7 @@ class ProjectSettingsComponent {
     private val myJiraUrlText = JBTextField()
     private val myUsernameText = JBTextField()
     private val myPasswordText = JBPasswordField()
+    private val myTemplateText = JBTextField()
 
     val preferredFocusedComponent: JComponent
         get() = myUsernameText
@@ -93,11 +98,18 @@ class ProjectSettingsComponent {
             myPasswordText.text = newText
         }
 
+    var templateText: String?
+        get() = myTemplateText.text
+        set(newText) {
+            myTemplateText.text = newText
+        }
+
     init {
         panel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
             .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
             .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Template: "), myTemplateText, 1, false)
             .addComponentFillVertically(JPanel(), 0)
             .panel
     }

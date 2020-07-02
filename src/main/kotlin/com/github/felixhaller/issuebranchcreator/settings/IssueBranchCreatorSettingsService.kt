@@ -19,6 +19,7 @@ class IssueBranchCreatorSettingsService(private val project: Project) {
 
         return IssueBranchCreatorSettings(
             jiraUrl = projectSettingsState.jiraUrl,
+            template = projectSettingsState.template,
             username = credentials?.userName ?: "",
             password = credentials?.getPasswordAsString() ?: ""
         )
@@ -27,6 +28,7 @@ class IssueBranchCreatorSettingsService(private val project: Project) {
     fun write(settings: IssueBranchCreatorSettings) {
         val projectSettingsState = project.service<ProjectSettingsState>()
         projectSettingsState.jiraUrl = settings.jiraUrl
+        projectSettingsState.template = settings.template
 
         val credentials = Credentials(settings.username, settings.password)
         PasswordSafe.instance.set(createCredentialAttributes(), credentials)
@@ -44,5 +46,6 @@ class IssueBranchCreatorSettingsService(private val project: Project) {
 data class IssueBranchCreatorSettings(
     val jiraUrl: String,
     val username: String,
-    val password: String
+    val password: String,
+    val template: String
 )
