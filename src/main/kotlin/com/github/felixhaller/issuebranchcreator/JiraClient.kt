@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.github.felixhaller.issuebranchcreator.settings.IssueBranchCreatorSettingsService
+import com.intellij.openapi.components.service
 import okhttp3.Credentials
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -19,11 +21,11 @@ private val mapper = ObjectMapper()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 class JiraClient {
-    private val baseURL = "https://jira.spreadomat.net"
+    fun getIssueTitle(issueId: String): String {
+        val settings = service<IssueBranchCreatorSettingsService>().read()
 
-    fun getIssueTitle(issueId: String, username: String, password: String): String {
-        val httpUrl = "$baseURL/rest/api/latest/issue/$issueId".toHttpUrl()
-        return client.getAndMapWithBasicAuth<IssueResponse>(httpUrl, mapper, username, password).fields.summary
+        val httpUrl = "${settings.jiraUrl}/rest/api/latest/issue/$issueId".toHttpUrl()
+        return client.getAndMapWithBasicAuth<IssueResponse>(httpUrl, mapper, settings.username, settings.password).fields.summary
     }
 }
 

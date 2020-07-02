@@ -12,10 +12,8 @@ class PopupDialogAction : AnAction() {
 
     override fun actionPerformed(event: AnActionEvent) {
         val issueId = Messages.showInputDialog("Jira Issue Id", "Jira issue id", null) ?: return
-        val username = Messages.showInputDialog("Username:", "Jira Credentials", null) ?: return
-        val password = Messages.showPasswordDialog("Password for $username:", "Jira Credentials") ?: return
-        val issueTitle = JiraClient()
-            .getIssueTitle(issueId, username, password)
+        val issueTitle = JiraClient().getIssueTitle(issueId)
+
         Messages.showMessageDialog(issueTitle, "Issue Title", null)
     }
 }
