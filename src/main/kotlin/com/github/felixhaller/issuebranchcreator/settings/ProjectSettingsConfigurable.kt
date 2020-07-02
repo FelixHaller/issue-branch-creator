@@ -1,15 +1,13 @@
 package com.github.felixhaller.issuebranchcreator.settings
 
-import com.intellij.credentialStore.CredentialAttributes
-import com.intellij.credentialStore.Credentials
-import com.intellij.credentialStore.generateServiceName
-import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.service
 import com.intellij.openapi.options.Configurable
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.FormBuilder
 import com.intellij.util.xmlb.XmlSerializerUtil
@@ -18,9 +16,6 @@ import javax.swing.JPanel
 
 
 class ProjectSettingsConfigurable : Configurable {
-    private val SYSTEM = "IssueBranchCreator"
-    private val CREDENTIALS_JIRA = "IssueBranchCreator.JiraLogin"
-
     private var mySettingsComponent: ProjectSettingsComponent? = null
 
     override fun isModified(): Boolean = true
@@ -33,35 +28,29 @@ class ProjectSettingsConfigurable : Configurable {
     }
 
     override fun apply() {
-        val settings: ProjectSettingsState = ProjectSettingsState.instance
+        val jiraUrl = mySettingsComponent!!.jiraUrlText ?: ""
+        val username = mySettingsComponent!!.usernameText ?: ""
+        val password = mySettingsComponent!!.passwordText ?: ""
 
-        settings.jiraUrl = mySettingsComponent!!.jiraUrlText ?: ""
-        val username = mySettingsComponent!!.userNameText
-        val password = mySettingsComponent!!.passwordText
+        val settings = IssueBranchCreatorSettings(
+            jiraUrl = jiraUrl,
+            username = username,
+            password = password
+        )
 
-        val credentialAttributes = createCredentialAttributes(CREDENTIALS_JIRA)
-        val credentials = Credentials(username, password)
-        PasswordSafe.instance.set(credentialAttributes, credentials)
+        service<IssueBranchCreatorSettingsService>().write(settings)
     }
 
     override fun reset() {
-        val settings: ProjectSettingsState = ProjectSettingsState.instance
-        mySettingsComponent!!.jiraUrlText = settings.jiraUrl
+        val settings = service<IssueBranchCreatorSettingsService>().read()
 
-        val credentialAttributes = createCredentialAttributes(CREDENTIALS_JIRA)
-        val credentials = PasswordSafe.instance.get(credentialAttributes)
-        if (credentials != null) {
-            mySettingsComponent!!.userNameText = credentials.getPasswordAsString()
-            mySettingsComponent!!.passwordText = credentials.userName
-        }
+        mySettingsComponent!!.jiraUrlText = settings.jiraUrl
+        mySettingsComponent!!.usernameText = settings.username
+        mySettingsComponent!!.passwordText = settings.password
     }
 
     override fun disposeUIResources() {
         mySettingsComponent = null
-    }
-
-    private fun createCredentialAttributes(key: String): CredentialAttributes {
-        return CredentialAttributes(generateServiceName(SYSTEM, key))
     }
 }
 
@@ -86,11 +75,11 @@ class ProjectSettingsState : PersistentStateComponent<ProjectSettingsState> {
 class ProjectSettingsComponent {
     val panel: JPanel
     private val myJiraUrlText = JBTextField()
-    private val myUserNameText = JBTextField()
-    private val myPasswordText = JBTextField()
+    private val myUsernameText = JBTextField()
+    private val myPasswordText = JBPasswordField()
 
     val preferredFocusedComponent: JComponent
-        get() = myUserNameText
+        get() = myUsernameText
 
     var jiraUrlText: String?
         get() = myJiraUrlText.text
@@ -98,10 +87,10 @@ class ProjectSettingsComponent {
             myJiraUrlText.text = newText
         }
 
-    var userNameText: String?
-        get() = myUserNameText.text
+    var usernameText: String?
+        get() = myUsernameText.text
         set(newText) {
-            myUserNameText.text = newText
+            myUsernameText.text = newText
         }
 
     var passwordText: String?
@@ -113,7 +102,7 @@ class ProjectSettingsComponent {
     init {
         panel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
-            .addLabeledComponent(JBLabel("Enter UserName: "), myUserNameText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
             .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
             .addComponentFillVertically(JPanel(), 0)
             .panel
