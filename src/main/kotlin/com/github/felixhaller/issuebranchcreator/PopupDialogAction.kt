@@ -20,5 +20,7 @@ class PopupDialogAction : AnAction() {
         val branchName = branchNameGenerator.generateBranchName(issueId, issueTitle)
 
         Messages.showMessageDialog(branchName, "Branch to be created", null)
+
+//        val popup = GitBranchPopup.getInstance(project, GitBranchUtil.getCurrentRepository(project)!!).asListPopup().showCenteredInCurrentWindow(project)
     }
 }

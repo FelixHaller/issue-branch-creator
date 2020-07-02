@@ -36,6 +36,7 @@ repositories {
     jcenter()
 }
 dependencies {
+//    compileOnly(files("C:/Program Files/JetBrains/IntelliJ IDEA 2020.1.1/plugins/git4idea/lib/git4idea.jar"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.squareup.okhttp3:okhttp:4.7.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
@@ -96,7 +97,7 @@ tasks {
         pluginDescription(closure {
             File("./README.md").readText().lines().run {
                 subList(indexOf("<!-- Plugin description -->") + 1, indexOf("<!-- Plugin description end -->"))
-            }.joinToString("\n").run { markdownToHTML(this) }
+            }.joinToString("/n").run { markdownToHTML(this) }
         })
 
         // Get the latest available change notes from the changelog file
