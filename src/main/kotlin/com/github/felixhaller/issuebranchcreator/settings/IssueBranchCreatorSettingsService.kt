@@ -5,15 +5,17 @@ import com.intellij.credentialStore.Credentials
 import com.intellij.credentialStore.generateServiceName
 import com.intellij.ide.passwordSafe.PasswordSafe
 import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
 
 private const val SYSTEM = "IssueBranchCreator"
 private const val CREDENTIALS_JIRA = "IssueBranchCreator.JiraLogin"
 
 @Service
-class IssueBranchCreatorSettingsService {
+class IssueBranchCreatorSettingsService(private val project: Project) {
     fun read(): IssueBranchCreatorSettings {
-        val projectSettingsState = ProjectSettingsState.instance
-        val credentials = PasswordSafe.instance.get(createCredentialAttributes(CREDENTIALS_JIRA))
+        val projectSettingsState = project.service<ProjectSettingsState>()
+        val credentials = PasswordSafe.instance.get(createCredentialAttributes())
 
         return IssueBranchCreatorSettings(
             jiraUrl = projectSettingsState.jiraUrl,
@@ -23,19 +25,22 @@ class IssueBranchCreatorSettingsService {
     }
 
     fun write(settings: IssueBranchCreatorSettings) {
-        val projectSettingsState = ProjectSettingsState.instance
+        val projectSettingsState = project.service<ProjectSettingsState>()
         projectSettingsState.jiraUrl = settings.jiraUrl
 
         val credentials = Credentials(settings.username, settings.password)
-        PasswordSafe.instance.set(createCredentialAttributes(CREDENTIALS_JIRA), credentials)
+        PasswordSafe.instance.set(createCredentialAttributes(), credentials)
     }
 
-    private fun createCredentialAttributes(key: String): CredentialAttributes {
+    private fun generateKey(): String {
+        return "${project.name}:$CREDENTIALS_JIRA"
+    }
+
+    private fun createCredentialAttributes(): CredentialAttributes {
         return CredentialAttributes(
-            generateServiceName(
-                SYSTEM,
-                key
-            )
+            generateServiceName(subsystem = SYSTEM, key = generateKey())
+
+
         )
     }
 }
