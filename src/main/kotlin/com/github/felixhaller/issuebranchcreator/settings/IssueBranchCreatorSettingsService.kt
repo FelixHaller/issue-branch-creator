@@ -37,11 +37,7 @@ class IssueBranchCreatorSettingsService(private val project: Project) {
     }
 
     private fun createCredentialAttributes(): CredentialAttributes {
-        return CredentialAttributes(
-            generateServiceName(subsystem = SYSTEM, key = generateKey())
-
-
-        )
+        return CredentialAttributes(generateServiceName(subsystem = SYSTEM, key = generateKey()))
     }
 }
 
