@@ -10,6 +10,7 @@ import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.options.Configurable
 import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBPasswordField
 import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.FormBuilder
 import com.intellij.util.xmlb.XmlSerializerUtil
@@ -36,7 +37,7 @@ class ProjectSettingsConfigurable : Configurable {
         val settings: ProjectSettingsState = ProjectSettingsState.instance
 
         settings.jiraUrl = mySettingsComponent!!.jiraUrlText ?: ""
-        val username = mySettingsComponent!!.userNameText
+        val username = mySettingsComponent!!.usernameText
         val password = mySettingsComponent!!.passwordText
 
         val credentialAttributes = createCredentialAttributes(CREDENTIALS_JIRA)
@@ -51,7 +52,7 @@ class ProjectSettingsConfigurable : Configurable {
         val credentialAttributes = createCredentialAttributes(CREDENTIALS_JIRA)
         val credentials = PasswordSafe.instance.get(credentialAttributes)
         if (credentials != null) {
-            mySettingsComponent!!.userNameText = credentials.getPasswordAsString()
+            mySettingsComponent!!.usernameText = credentials.getPasswordAsString()
             mySettingsComponent!!.passwordText = credentials.userName
         }
     }
@@ -86,11 +87,11 @@ class ProjectSettingsState : PersistentStateComponent<ProjectSettingsState> {
 class ProjectSettingsComponent {
     val panel: JPanel
     private val myJiraUrlText = JBTextField()
-    private val myUserNameText = JBTextField()
-    private val myPasswordText = JBTextField()
+    private val myUsernameText = JBTextField()
+    private val myPasswordText = JBPasswordField()
 
     val preferredFocusedComponent: JComponent
-        get() = myUserNameText
+        get() = myUsernameText
 
     var jiraUrlText: String?
         get() = myJiraUrlText.text
@@ -98,10 +99,10 @@ class ProjectSettingsComponent {
             myJiraUrlText.text = newText
         }
 
-    var userNameText: String?
-        get() = myUserNameText.text
+    var usernameText: String?
+        get() = myUsernameText.text
         set(newText) {
-            myUserNameText.text = newText
+            myUsernameText.text = newText
         }
 
     var passwordText: String?
@@ -113,7 +114,7 @@ class ProjectSettingsComponent {
     init {
         panel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
-            .addLabeledComponent(JBLabel("Enter UserName: "), myUserNameText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
             .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
             .addComponentFillVertically(JPanel(), 0)
             .panel
