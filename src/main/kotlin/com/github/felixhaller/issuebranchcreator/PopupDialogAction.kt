@@ -15,8 +15,9 @@ class PopupDialogAction : AnAction() {
     }
 
     override fun actionPerformed(event: AnActionEvent) {
+        val project = event.project!!
         val issueId = Messages.showInputDialog("Jira Issue Id", "Jira issue id", null) ?: return
-        val issueTitle = JiraClient().getIssueTitle(issueId)
+        val issueTitle = JiraClient(project).getIssueTitle(issueId)
 
         val branchName = branchNameGenerator.generateBranchName(issueId, issueTitle)
 

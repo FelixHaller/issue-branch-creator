@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.felixhaller.issuebranchcreator.settings.IssueBranchCreatorSettingsService
 import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
 import okhttp3.Credentials
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -20,9 +21,9 @@ private val mapper = ObjectMapper()
     .registerKotlinModule()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-class JiraClient {
+class JiraClient(private val project: Project) {
     fun getIssueTitle(issueId: String): String {
-        val settings = service<IssueBranchCreatorSettingsService>().read()
+        val settings = project.service<IssueBranchCreatorSettingsService>().read()
 
         val httpUrl = "${settings.jiraUrl}/rest/api/latest/issue/$issueId".toHttpUrl()
         return client.getAndMapWithBasicAuth<IssueResponse>(httpUrl, mapper, settings.username, settings.password).fields.summary

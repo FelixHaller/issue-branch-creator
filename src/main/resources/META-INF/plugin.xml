@@ -6,6 +6,7 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>Git4Idea</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="com.github.felixhaller.issuebranchcreator.settings.ProjectSettingsState"/>
