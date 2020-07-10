@@ -9,9 +9,9 @@ import org.apache.commons.text.StringSubstitutor
 
 class BranchNameGenerator(project: Project) {
 
-    val settings = project.service<IssueBranchCreatorSettingsService>().read()
-    val slugifier = Slugify()
-    val template = settings.template
+    private val settings = project.service<IssueBranchCreatorSettingsService>().read()
+    private val slugifier = Slugify()
+    private val template = settings.template
 
     fun generateBranchName(issueId: String, issueTitle: String): String {
         val cleanedIssueTitle = cleanIssueTitle(issueTitle)

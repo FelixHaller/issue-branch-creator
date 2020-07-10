@@ -24,5 +24,8 @@
             <add-to-group group-id="GitRepositoryActions" anchor="first"/>
             <keyboard-shortcut first-keystroke="control G" second-keystroke="C" keymap="$default"/>
         </action>
+        <group id="My.Tree.Context">
+            <reference id="com.github.felixhaller.issuebranchcreator.PopupDialogAction"/>
+        </group>
     </actions>
 </idea-plugin>

@@ -53,6 +53,8 @@ intellij {
     type = platformType
     downloadSources = platformDownloadSources.toBoolean()
     updateSinceUntilBuild = true
+    setPlugins("git4idea")
+
 
     setPlugins("git4idea")
 
@@ -85,6 +87,10 @@ tasks {
             kotlinOptions.jvmTarget = "1.8"
         }
     }
+
+//    runIde {
+//        jvmArgs("--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED")
+//    }
 
     withType<Detekt> {
         jvmTarget = "1.8"
