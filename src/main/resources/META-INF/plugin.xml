@@ -19,8 +19,8 @@
     </extensions>
 
     <actions>
-        <action id="com.github.felixhaller.issuebranchcreator.PopupDialogAction"
-                class="com.github.felixhaller.issuebranchcreator.PopupDialogAction" text="Create a Branch by Issue Id">
+        <action id="com.github.felixhaller.issuebranchcreator.CreateBranchByIssueIdAction"
+                class="com.github.felixhaller.issuebranchcreator.CreateBranchByIssueIdAction" text="Create a Branch by Issue Id">
             <add-to-group group-id="GitRepositoryActions" anchor="first"/>
             <keyboard-shortcut first-keystroke="control G" second-keystroke="C" keymap="$default"/>
         </action>

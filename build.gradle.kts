@@ -1,19 +1,15 @@
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.changelog.closure
-import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    id("org.jetbrains.kotlin.jvm") version "1.4.31"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.4.21"
-    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "0.3.2"
+    id("org.jetbrains.intellij") version "0.7.2"
     // detekt linter - read more: https://detekt.github.io/detekt/kotlindsl.html
-    id("io.gitlab.arturbosch.detekt") version "1.10.0-RC1"
+    id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
 
 // Import variables from gradle.properties file
@@ -36,13 +32,13 @@ repositories {
     jcenter()
 }
 dependencies {
-//    compileOnly(files("C:/Program Files/JetBrains/IntelliJ IDEA 2020.1.1/plugins/git4idea/lib/git4idea.jar"))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.squareup.okhttp3:okhttp:4.7.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+")
-    implementation("com.github.slugify:slugify:2.1.3")
-    implementation("org.apache.commons:commons-text:1.8")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.10.0-RC1")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.2")
+    implementation("com.github.slugify:slugify:2.4")
+    implementation("org.apache.commons:commons-text:1.9")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -96,16 +92,11 @@ tasks {
         untilBuild(pluginUntilBuild)
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription(closure {
-            File("./README.md").readText().lines().run {
-                subList(indexOf("<!-- Plugin description -->") + 1, indexOf("<!-- Plugin description end -->"))
-            }.joinToString("/n").run { markdownToHTML(this) }
-        })
-
-        // Get the latest available change notes from the changelog file
-        changeNotes(closure {
-            changelog.getLatest().toHTML()
-        })
+        pluginDescription(
+                File("./README.md").readText().lines().run {
+                    subList(indexOf("<!-- Plugin description -->") + 1, indexOf("<!-- Plugin description end -->"))
+                }.joinToString("/n")
+        )
     }
 
     publishPlugin {

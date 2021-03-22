@@ -1,28 +1,27 @@
-# issue-branch-creator
+<p align="center">
+  <img src=".github/logo.png" width="256" height="256" />
+</p>
+
+# issue branch creator
 
 ![Build](https://github.com/FelixHaller/issue-branch-creator/workflows/Build/badge.svg)
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
-
-This specific section is a source for the [plugin.xml](./src/main/resources/META-INF/plugin.xml) file which will be
-extracted by the [Gradle](./build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections. 
+Simplifies git branch creation with the name of a JIRA issue.
 <!-- Plugin description end -->
 
-## Installation
+## Screenshots
 
-- Using IDE built-in plugin system:
-  
-  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "issue-branch-creator"</kbd> >
-  <kbd>Install Plugin</kbd>
-  
-- Manually:
+Enter your issue Id
 
-  Download the [latest release](https://github.com/FelixHaller/issue-branch-creator/releases/latest) and install it manually using
-  <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
+![Enter your issue Id](.github/issue-id-dialog.png)
 
+Check the suggested branch name
 
----
-Plugin based on the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template).
+![Check the suggested branch name](.github/branch-dialog.png)
+
+Profit 💰
+
+**Available Settings**
+
+![Settings](.github/settings.png)

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.felixhaller.issuebranchcreator.settings.IssueBranchCreatorSettingsService
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import okhttp3.Credentials
@@ -14,13 +15,19 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
-private val client = OkHttpClient()
+private val client = OkHttpClient.Builder()
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
+        .build()
+
 private val mapper = ObjectMapper()
-    .registerKotlinModule()
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerKotlinModule()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
+@Service
 class JiraClient(private val project: Project) {
     fun getIssueTitle(issueId: String): String {
         val settings = project.service<IssueBranchCreatorSettingsService>().read()
@@ -31,10 +38,10 @@ class JiraClient(private val project: Project) {
 }
 
 data class IssueResponse(
-    val fields: Fields
+        val fields: Fields
 ) {
     data class Fields(
-        val summary: String
+            val summary: String
     )
 }
 

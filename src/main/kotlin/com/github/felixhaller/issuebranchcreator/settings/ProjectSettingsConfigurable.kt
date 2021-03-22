@@ -1,5 +1,6 @@
 package com.github.felixhaller.issuebranchcreator.settings
 
+import com.github.felixhaller.issuebranchcreator.BranchNameGenerator
 import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
@@ -22,7 +23,7 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
     override fun getPreferredFocusedComponent(): JComponent = mySettingsComponent!!.preferredFocusedComponent
 
     override fun createComponent(): JComponent {
-        mySettingsComponent = ProjectSettingsComponent()
+        mySettingsComponent = ProjectSettingsComponent(project)
         return mySettingsComponent!!.panel
     }
 
@@ -33,10 +34,10 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
         val template = mySettingsComponent!!.templateText ?: ""
 
         val settings = IssueBranchCreatorSettings(
-            jiraUrl = jiraUrl,
-            username = username,
-            password = password,
-            template = template
+                jiraUrl = jiraUrl,
+                username = username,
+                password = password,
+                template = template
         )
 
         project.service<IssueBranchCreatorSettingsService>().write(settings)
@@ -70,12 +71,16 @@ class ProjectSettingsState : PersistentStateComponent<ProjectSettingsState> {
     }
 }
 
-class ProjectSettingsComponent {
+class ProjectSettingsComponent(private val project: Project) {
     val panel: JPanel
+
     private val myJiraUrlText = JBTextField()
     private val myUsernameText = JBTextField()
     private val myPasswordText = JBPasswordField()
     private val myTemplateText = JBTextField()
+    private val availablePlaceholder = JBLabel()
+
+    private val branchNameGenerator = project.service<BranchNameGenerator>()
 
     val preferredFocusedComponent: JComponent
         get() = myUsernameText
@@ -105,12 +110,16 @@ class ProjectSettingsComponent {
         }
 
     init {
+        myJiraUrlText.emptyText.text = "https://jira.mycompany.com"
+        availablePlaceholder.text = branchNameGenerator.availablePlaceholder.joinToString(", ") { "{${it}}" }
+
         panel = FormBuilder.createFormBuilder()
-            .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
-            .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
-            .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
-            .addLabeledComponent(JBLabel("Enter Template: "), myTemplateText, 1, false)
-            .addComponentFillVertically(JPanel(), 0)
-            .panel
+                .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
+                .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
+                .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
+                .addLabeledComponent(JBLabel("Enter Template: "), myTemplateText, 1, false)
+                .addLabeledComponent(JBLabel("Available Placeholder: "), availablePlaceholder, 1, false)
+                .addComponentFillVertically(JPanel(), 0)
+                .panel
     }
 }
