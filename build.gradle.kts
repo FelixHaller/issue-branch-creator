@@ -3,6 +3,7 @@ import org.jetbrains.changelog.closure
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+
 plugins {
     // Java support
     id("java")
@@ -14,12 +15,16 @@ plugins {
     id("org.jetbrains.changelog") version "1.1.2"
     // detekt linter - read more: https://detekt.github.io/detekt/kotlindsl.html
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
+
+    id("com.palantir.git-version") version "0.12.3"
 }
+
+val gitVersion: groovy.lang.Closure<*> by extra
 
 // Import variables from gradle.properties file
 val pluginGroup: String by project
 val pluginName: String by project
-val pluginVersion: String by project
+val pluginVersion = gitVersion()
 val pluginSinceBuild: String by project
 val pluginUntilBuild: String by project
 
