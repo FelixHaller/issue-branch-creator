@@ -24,7 +24,7 @@ val gitVersion: groovy.lang.Closure<*> by extra
 // Import variables from gradle.properties file
 val pluginGroup: String by project
 val pluginName: String by project
-val pluginVersion = gitVersion()
+val pluginVersion: String = gitVersion() as String
 val pluginSinceBuild: String by project
 val pluginUntilBuild: String by project
 
@@ -80,6 +80,7 @@ detekt {
 }
 
 changelog {
+    version = pluginVersion
     headerParserRegex = "^(\\d*)\\.(\\d*)\\.(\\d*)$"
 }
 
