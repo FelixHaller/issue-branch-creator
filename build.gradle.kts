@@ -1,4 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.changelog.closure
+import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -8,6 +10,8 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.4.31"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "0.7.2"
+    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+    id("org.jetbrains.changelog") version "1.1.2"
     // detekt linter - read more: https://detekt.github.io/detekt/kotlindsl.html
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
@@ -92,11 +96,16 @@ tasks {
         untilBuild(pluginUntilBuild)
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-        pluginDescription(
-                File("./README.md").readText().lines().run {
-                    subList(indexOf("<!-- Plugin description -->") + 1, indexOf("<!-- Plugin description end -->"))
-                }.joinToString("/n")
-        )
+        pluginDescription(closure {
+            File("./README.md").readText().lines().run {
+                subList(indexOf("<!-- Plugin description -->") + 1, indexOf("<!-- Plugin description end -->"))
+            }.joinToString("/n").run { markdownToHTML(this) }
+        })
+
+        // Get the latest available change notes from the changelog file
+        changeNotes(closure {
+            changelog.getLatest().toHTML()
+        })
     }
 
     publishPlugin {
