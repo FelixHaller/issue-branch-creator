@@ -1,7 +1,17 @@
-<!-- Keep a Changelog guide -> https://keepachangelog.com -->
-
 # Changelog
 
 ## [Unreleased]
 
-* initial release
+### Added
+
+- initial release
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security

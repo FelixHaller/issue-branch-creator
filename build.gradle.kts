@@ -81,7 +81,7 @@ detekt {
 
 changelog {
     version = pluginVersion
-    headerParserRegex = "^(\\d*)\\.(\\d*)\\.(\\d*)$"
+    headerParserRegex = "^(\\d*)\\.(\\d*)\\.(\\d*).(\\d*).*$"
 }
 
 tasks {
