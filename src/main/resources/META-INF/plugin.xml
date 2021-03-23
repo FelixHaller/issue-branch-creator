@@ -20,8 +20,8 @@
 
     <actions>
         <action id="com.github.felixhaller.issuebranchcreator.CreateBranchByIssueIdAction"
-                class="com.github.felixhaller.issuebranchcreator.CreateBranchByIssueIdAction" text="Create a Branch by Issue Id">
-            <add-to-group group-id="GitRepositoryActions" anchor="first"/>
+                class="com.github.felixhaller.issuebranchcreator.CreateBranchByIssueIdAction" text="New Branch by Issue Id">
+            <add-to-group group-id="Git.MainMenu" anchor="after" relative-to-action="Git.CreateNewBranch"/>
             <keyboard-shortcut first-keystroke="control G" second-keystroke="C" keymap="$default"/>
         </action>
     </actions>

@@ -36,7 +36,7 @@ class CreateBranchByIssueIdWorkflow(private val project: Project) {
 
         val branchName = branchNameGenerator.generateBranchName(issueId, issueTitle)
         val branchNameUser = Messages.showInputDialog("New branch name", DIALOG_TITLE, null, branchName, null)
-                ?: return CreateBranchByIssueIdWorkflowResult.NoAction("User cancelled Dialog")
+            ?: return CreateBranchByIssueIdWorkflowResult.NoAction("User cancelled Dialog")
         if (branchNameUser.isBlank()) {
             log.warn("Branch name can't be blank")
             return CreateBranchByIssueIdWorkflowResult.Error("Branch name can't be empty")

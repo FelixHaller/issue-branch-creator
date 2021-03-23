@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit
 
 
 private val client = OkHttpClient.Builder()
-        .connectTimeout(5, TimeUnit.SECONDS)
-        .readTimeout(5, TimeUnit.SECONDS)
-        .build()
+    .connectTimeout(5, TimeUnit.SECONDS)
+    .readTimeout(5, TimeUnit.SECONDS)
+    .build()
 
 private val mapper = ObjectMapper()
-        .registerKotlinModule()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    .registerKotlinModule()
+    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 @Service
 class JiraClient(private val project: Project) {
@@ -38,10 +38,10 @@ class JiraClient(private val project: Project) {
 }
 
 data class IssueResponse(
-        val fields: Fields
+    val fields: Fields
 ) {
     data class Fields(
-            val summary: String
+        val summary: String
     )
 }
 

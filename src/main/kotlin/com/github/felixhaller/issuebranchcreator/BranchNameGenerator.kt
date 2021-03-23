@@ -22,8 +22,8 @@ class BranchNameGenerator(project: Project) {
     fun generateBranchName(issueId: String, issueTitle: String): String {
         val cleanedIssueTitle = cleanIssueTitle(issueTitle)
         val valuesMap = mapOf(
-                ISSUE_ID.toLowerCase() to issueId,
-                CLEAN_ISSUE_TITLE.toLowerCase() to cleanedIssueTitle
+            ISSUE_ID.toLowerCase() to issueId,
+            CLEAN_ISSUE_TITLE.toLowerCase() to cleanedIssueTitle
         )
         val stringSubstitutor = StringSubstitutor(valuesMap, "{", "}")
         return stringSubstitutor.replace(template.toLowerCase())

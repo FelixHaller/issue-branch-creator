@@ -34,10 +34,10 @@ class ProjectSettingsConfigurable(private val project: Project) : Configurable {
         val template = mySettingsComponent!!.templateText ?: ""
 
         val settings = IssueBranchCreatorSettings(
-                jiraUrl = jiraUrl,
-                username = username,
-                password = password,
-                template = template
+            jiraUrl = jiraUrl,
+            username = username,
+            password = password,
+            template = template
         )
 
         project.service<IssueBranchCreatorSettingsService>().write(settings)
@@ -114,12 +114,12 @@ class ProjectSettingsComponent(private val project: Project) {
         availablePlaceholder.text = branchNameGenerator.availablePlaceholder.joinToString(", ") { "{${it}}" }
 
         panel = FormBuilder.createFormBuilder()
-                .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
-                .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
-                .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
-                .addLabeledComponent(JBLabel("Enter Template: "), myTemplateText, 1, false)
-                .addLabeledComponent(JBLabel("Available Placeholder: "), availablePlaceholder, 1, false)
-                .addComponentFillVertically(JPanel(), 0)
-                .panel
+            .addLabeledComponent(JBLabel("Enter Jira URL: "), myJiraUrlText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Username: "), myUsernameText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Password: "), myPasswordText, 1, false)
+            .addLabeledComponent(JBLabel("Enter Template: "), myTemplateText, 1, false)
+            .addLabeledComponent(JBLabel("Available Placeholder: "), availablePlaceholder, 1, false)
+            .addComponentFillVertically(JPanel(), 0)
+            .panel
     }
 }

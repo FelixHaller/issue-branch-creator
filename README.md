@@ -10,6 +10,8 @@
 Simplifies git branch creation with the name of a JIRA issue.
 <!-- Plugin description end -->
 
+Default Shortcut: <kbd>Ctrl</kbd>+<kbd>G</kbd>,<kbd>C</kbd>
+
 ## Screenshots
 
 Enter your issue Id
