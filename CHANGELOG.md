@@ -6,6 +6,8 @@
 
 ### Changed
 
+- plugin description and license as requests by Jetbrains Plugin approval process
+
 ### Deprecated
 
 ### Removed

@@ -8,9 +8,11 @@
 
 <!-- Plugin description -->
 Simplifies git branch creation with the name of a JIRA issue.
-<!-- Plugin description end -->
 
-Default Shortcut: <kbd>Ctrl</kbd>+<kbd>G</kbd>,<kbd>C</kbd>
+For the initial setup please go to `Files -> Settings -> Tools -> Issue Branch Creator` and fill out the fields.
+
+After that you can use the default Shortcut: <kbd>Ctrl</kbd>+<kbd>G</kbd>,<kbd>C</kbd> or the `Main Menu -> Git -> New Branch by Issue Id` to create a new branch.
+<!-- Plugin description end -->
 
 ## Screenshots
 
