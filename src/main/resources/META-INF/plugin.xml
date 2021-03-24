@@ -1,7 +1,7 @@
 <idea-plugin url="www.jetbrains.com">
     <id>com.github.felixhaller.issuebranchcreator</id>
     <name>issue-branch-creator</name>
-    <vendor>feha,patb</vendor>
+    <vendor>Felix Haller, Patrick Bachmann</vendor>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
