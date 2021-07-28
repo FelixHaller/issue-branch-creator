@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+* support for 2021.2
 
 ### Changed
 
